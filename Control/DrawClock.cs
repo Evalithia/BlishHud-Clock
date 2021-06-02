@@ -71,11 +71,6 @@ namespace Clock
                 VerticalAlignment.Top
                 );
 
-            //rect = new Rectangle((Size.X / 2) - (width / 2) - 1, rect.Y + height + 2, width + 2, _underlineSize + 2);
-            //spriteBatch.DrawOnCtrl(this, ContentService.Textures.Pixel, rect, new Color(0, 0, 0, 200));
-            //rect = new Rectangle(rect.X + 1, rect.Y + 1, width, _underlineSize);
-            //spriteBatch.DrawOnCtrl(this, ContentService.Textures.Pixel, rect, _brightGold);
-
         }
 
     }

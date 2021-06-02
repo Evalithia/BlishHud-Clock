@@ -28,7 +28,7 @@ namespace Clock
         private SettingEntry<ContentService.FontSize> _settingClockFontSize;
         private SettingEntry<string> _settingClockX;
         private SettingEntry<string> _settingClockY;
-        private DrawClock _clockImg;
+        private DrawClock _clockImg; 
 
         [ImportingConstructor]
         public Module([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
