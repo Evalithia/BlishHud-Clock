@@ -1,0 +1,8 @@
+C:\Users\manla\source\repos\Clock\obj\x64\Debug\Clock.csproj.CoreCompileInputs.cache
+C:\Users\manla\source\repos\Clock\bin\x64\Debug\manifest.json
+C:\Users\manla\source\repos\Clock\bin\x64\Debug\Clock.dll.config
+C:\Users\manla\source\repos\Clock\bin\x64\Debug\Clock.dll
+C:\Users\manla\source\repos\Clock\bin\x64\Debug\Clock.pdb
+C:\Users\manla\source\repos\Clock\obj\x64\Debug\Clock.dll
+C:\Users\manla\source\repos\Clock\obj\x64\Debug\Clock.pdb
+C:\Users\manla\source\repos\Clock\obj\x64\Debug\Clock.csprojAssemblyReference.cache
