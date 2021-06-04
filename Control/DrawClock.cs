@@ -66,7 +66,7 @@ namespace Clock
                 Color.White, 
                 false, 
                 true, 
-                3, 
+                1, 
                 HorizontalAlignment.Right, 
                 VerticalAlignment.Top
                 );
