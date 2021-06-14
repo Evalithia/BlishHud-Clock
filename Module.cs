@@ -22,10 +22,15 @@ namespace Clock
         internal Gw2ApiManager Gw2ApiManager => this.ModuleParameters.Gw2ApiManager;
         #endregion
 
+        //Doing this because using ContentServices.FontSize in SettingEntry shows "0" on settings page.
+        private enum FontSizes
+        {
+            Size8, Size11, Size12, Size14, Size16, Size18, Size20, Size22, Size24, Size32, Size34, Size36
+        };
         private SettingEntry<bool> _settingClockLocal;
         private SettingEntry<bool> _settingClockTyria;
         private SettingEntry<bool> _settingClockServer;
-        private SettingEntry<ContentService.FontSize> _settingClockFontSize;
+        private SettingEntry<FontSizes> _settingClockFontSize;
         private SettingEntry<string> _settingClockX;
         private SettingEntry<string> _settingClockY;
         private DrawClock _clockImg; 
@@ -39,10 +44,9 @@ namespace Clock
             _settingClockLocal = settings.DefineSetting("ClockLocal", true, "Local", "");
             _settingClockTyria = settings.DefineSetting("ClockTyria", true, "Tyria", "");
             _settingClockServer = settings.DefineSetting("ClockServer", false, "Server", "");
-            _settingClockFontSize = settings.DefineSetting("ClockFont", ContentService.FontSize.Size12, "Font Size", "");
+            _settingClockFontSize = settings.DefineSetting("ClockFont", FontSizes.Size12, "Font Size", "");
             _settingClockX = settings.DefineSetting("ClockX", "100", "X", "");
             _settingClockY = settings.DefineSetting("ClockY", "100", "Y", "");
-            //_settingFontSize.SetRange(1, 20);
         }
 
         protected override void Initialize()
@@ -96,9 +100,9 @@ namespace Clock
             _clockImg.ShowTyria = _settingClockTyria.Value;
             _clockImg.ShowServer = _settingClockServer.Value;
         }
-        private void UpdateClockSettings_Font(object sender = null, ValueChangedEventArgs<ContentService.FontSize> e = null)
+        private void UpdateClockSettings_Font(object sender = null, ValueChangedEventArgs<FontSizes> e = null)
         {
-            _clockImg.Font_Size = _settingClockFontSize.Value;
+            _clockImg.Font_Size = GetFontSize(_settingClockFontSize.Value);
         }
         private void UpdateClockSettings_Location(object sender = null, ValueChangedEventArgs<string> e = null)
         {
@@ -127,6 +131,38 @@ namespace Clock
             return new DateTime (2000,1,1,tyrianhour,tyrianmin,tyriasec);
         }
 
+        private ContentService.FontSize GetFontSize(FontSizes fontSize)
+        {
+            switch (fontSize)
+            {
+                default:
+                case FontSizes.Size8:
+                    return ContentService.FontSize.Size8;
+                case FontSizes.Size11:
+                    return ContentService.FontSize.Size11;
+                case FontSizes.Size12:
+                    return ContentService.FontSize.Size12;
+                case FontSizes.Size14:
+                    return ContentService.FontSize.Size14;
+                case FontSizes.Size16:
+                    return ContentService.FontSize.Size16;
+                case FontSizes.Size18:
+                    return ContentService.FontSize.Size18;
+                case FontSizes.Size20:
+                    return ContentService.FontSize.Size20;
+                case FontSizes.Size22:
+                    return ContentService.FontSize.Size22;
+                case FontSizes.Size24:
+                    return ContentService.FontSize.Size24;
+                case FontSizes.Size32:
+                    return ContentService.FontSize.Size32;
+                case FontSizes.Size34:
+                    return ContentService.FontSize.Size34;
+                case FontSizes.Size36:
+                    return ContentService.FontSize.Size36;
+            }
+        }
+    
     }
 
 }

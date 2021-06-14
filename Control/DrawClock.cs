@@ -50,11 +50,11 @@ namespace Clock
             _font = GameService.Content.GetFont(ContentService.FontFace.Menomonia, Font_Size, ContentService.FontStyle.Regular);
 
             if (this.ShowLocal)
-                text += "Local: " + LocalTime.ToString("h:mm tt") + "\n";
+                text += " Local: " + LocalTime.ToString("h:mm tt") + " \n";
             if (this.ShowTyria)
-                text += "Tyria: " + TyriaTime.ToString("h:mm tt") + "\n";
+                text += " Tyria: " + TyriaTime.ToString("h:mm tt") + " \n";
             if (this.ShowServer)
-                text += "Server: " + ServerTime.ToString("h:mm tt") + "\n";
+                text += " Server: " + ServerTime.ToString("h:mm tt") + "  \n";
             width = (int)_font.MeasureString(text).Width;
             height = (int)_font.MeasureString(text).Height;
             this.Size = new Point(width, height);
