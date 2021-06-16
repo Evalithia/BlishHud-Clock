@@ -7,12 +7,13 @@
 
     "description": "Clock for Local, Tyria, and Server time",
     "dependencies": {
-        "bh.blishhud": ">=0.5.2"
+        "bh.blishhud": ">=0.7.0"
     },
     "url": "https://github.com/manlaan/BlishHud-Clock",
     "contributors": [
         {
-            "name": "Manlaan"
+            "name": "Manlaan",
+            "username": "manlaan.8921"
         }
     ]
 }
