@@ -1,6 +1,6 @@
 {
     "name": "Clock",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "namespace": "Clock",
     "package": "Clock.dll",
     "manifest_version": 1,
