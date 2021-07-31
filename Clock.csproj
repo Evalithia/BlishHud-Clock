@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1FD92DC4-E1C7-4CA4-96CD-05D99315374B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Clock</RootNamespace>
+    <RootNamespace>Manlaan.Clock</RootNamespace>
     <AssemblyName>Clock</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

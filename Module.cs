@@ -7,7 +7,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 
-namespace Clock
+namespace Manlaan.Clock
 {
     [Export(typeof(Blish_HUD.Modules.Module))]
     public class Module : Blish_HUD.Modules.Module
@@ -120,15 +120,22 @@ namespace Clock
         }
         private DateTime CalcTyriaTime()
         {
-            DateTime UTC = DateTime.UtcNow;
-            int utcsec = utcsec = (UTC.Hour * 3600) + (UTC.Minute * 60) + UTC.Second; 
-            int tyriasec = (utcsec *  12)-60;
-            tyriasec = tyriasec % (3600*24);
-            int tyrianhour = (int)(tyriasec / 3600);
-            tyriasec = tyriasec % 3600;
-            int tyrianmin = (int)(tyriasec / 60);
-            tyriasec = tyriasec % 60;
-            return new DateTime (2000,1,1,tyrianhour,tyrianmin,tyriasec);
+            try
+            {
+                DateTime UTC = DateTime.UtcNow;
+                int utcsec = utcsec = (UTC.Hour * 3600) + (UTC.Minute * 60) + UTC.Second;
+                int tyriasec = (utcsec * 12) - 60;
+                tyriasec = tyriasec % (3600 * 24);
+                int tyrianhour = (int)(tyriasec / 3600);
+                tyriasec = tyriasec % 3600;
+                int tyrianmin = (int)(tyriasec / 60);
+                tyriasec = tyriasec % 60;
+                return new DateTime(2000, 1, 1, tyrianhour, tyrianmin, tyriasec);
+            } catch
+            {
+                return new DateTime(2000, 1, 1, 0, 0, 0);
+            }
+
         }
 
         private ContentService.FontSize GetFontSize(FontSizes fontSize)

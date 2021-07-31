@@ -1,7 +1,7 @@
 {
     "name": "Clock",
-    "version": "1.0.1",
-    "namespace": "Clock",
+    "version": "1.0.3",
+    "namespace": "Manlaan.Clock",
     "package": "Clock.dll",
     "manifest_version": 1,
 
