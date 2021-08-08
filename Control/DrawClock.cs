@@ -5,34 +5,30 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 
-namespace Manlaan.Clock
+namespace Manlaan.Clock.Control
 {
     class DrawClock : Container
     {
         public bool ShowLocal = false;
         public bool ShowTyria = false;
         public bool ShowServer = false;
-        public ContentService.FontSize Font_Size;
-        public DateTime LocalTime;
+        public bool Show24H = false;
+        public bool HideLabel = false;
+        public ContentService.FontSize Font_Size = ContentService.FontSize.Size11;
+        public DateTime LocalTime = DateTime.Now;
         public DateTime TyriaTime;
         public DateTime ServerTime;
+        public HorizontalAlignment LabelAlign = HorizontalAlignment.Right;
+        public HorizontalAlignment TimeAlign = HorizontalAlignment.Right;
 
         private static BitmapFont _font; 
 
         public DrawClock()
         {
-            this.ShowLocal = false;
-            this.ShowTyria = false;
-            this.ShowServer = false;
-            this.Font_Size = ContentService.FontSize.Size11;
-            this.LocalTime = DateTime.Now;
-            this.TyriaTime = DateTime.Now;
-            this.ServerTime = DateTime.Now;
             this.Location = new Point(0, 0);
-
             this.Size = new Point(0, 0);
             this.Visible = true;
-            this.ZIndex = 0;
+            this.ZIndex = int.MinValue;
             this.Padding = Thickness.Zero;
         }
 
@@ -44,30 +40,62 @@ namespace Manlaan.Clock
 
         public override void PaintBeforeChildren(SpriteBatch spriteBatch, Rectangle bounds)
         {
-            string text = "";
-            int height;
-            int width;
+            string labels = "";
+            string times = "";
+            Point LabelSize;
+            Point TimeSize;
             _font = GameService.Content.GetFont(ContentService.FontFace.Menomonia, Font_Size, ContentService.FontStyle.Regular);
 
-            if (this.ShowLocal)
-                text += " Local: " + LocalTime.ToString("h:mm tt") + " \n";
-            if (this.ShowTyria)
-                text += " Tyria: " + TyriaTime.ToString("h:mm tt") + " \n";
-            if (this.ShowServer)
-                text += " Server: " + ServerTime.ToString("h:mm tt") + "  \n";
-            width = (int)_font.MeasureString(text).Width;
-            height = (int)_font.MeasureString(text).Height;
-            this.Size = new Point(width, height);
+            string format = "h:mm tt";
+            if (this.Show24H)
+                format = "H:mm";
 
-            spriteBatch.DrawStringOnCtrl(this, 
-                text, 
+            if (this.ShowLocal)
+            {
+                if (!HideLabel) labels += " Local: \n";
+                times += " " + LocalTime.ToString(format) + " \n";
+            }
+            if (this.ShowTyria) 
+            {
+                if (!HideLabel) labels += " Tyria: \n";
+                times += " " + TyriaTime.ToString(format) + " \n";
+            }
+            if (this.ShowServer)
+            {
+                if (!HideLabel) labels += " Server: \n";
+                times += " " + ServerTime.ToString(format) + " \n";
+            }
+            LabelSize = new Point(
+                (int)_font.MeasureString(labels).Width,
+                (int)_font.MeasureString(labels).Height
+                );
+            TimeSize = new Point(
+                (int)_font.MeasureString(times).Width,
+                (int)_font.MeasureString(times).Height
+                );
+            this.Size = LabelSize + TimeSize;
+
+            if (!HideLabel) 
+                spriteBatch.DrawStringOnCtrl(this,
+                    labels,
+                    _font,
+                    new Rectangle(0, 0, LabelSize.X, this.Size.Y),
+                    Color.White,
+                    false,
+                    true,
+                    1,
+                    LabelAlign,
+                    VerticalAlignment.Top
+                    );
+            spriteBatch.DrawStringOnCtrl(this,
+                times,
                 _font,
-                new Rectangle(0, 0, width, height), 
-                Color.White, 
-                false, 
-                true, 
-                1, 
-                HorizontalAlignment.Right, 
+                new Rectangle(LabelSize.X, 0, TimeSize.X, this.Size.Y),
+                Color.White,
+                false,
+                true,
+                1,
+                TimeAlign,
                 VerticalAlignment.Top
                 );
 

@@ -2,6 +2,7 @@
 using Blish_HUD.Modules;
 using Blish_HUD.Modules.Managers;
 using Blish_HUD.Settings;
+using Blish_HUD.Controls;
 using Microsoft.Xna.Framework;
 using System;
 using System.ComponentModel.Composition;
@@ -30,10 +31,14 @@ namespace Manlaan.Clock
         private SettingEntry<bool> _settingClockLocal;
         private SettingEntry<bool> _settingClockTyria;
         private SettingEntry<bool> _settingClockServer;
+        private SettingEntry<bool> _settingClock24H;
+        private SettingEntry<bool> _settingClockHideLabel;
         private SettingEntry<FontSizes> _settingClockFontSize;
+        private SettingEntry<HorizontalAlignment> _settingClockLabelAlign;
+        private SettingEntry<HorizontalAlignment> _settingClockTimeAlign;
         private SettingEntry<string> _settingClockX;
         private SettingEntry<string> _settingClockY;
-        private DrawClock _clockImg; 
+        private Control.DrawClock _clockImg; 
 
         [ImportingConstructor]
         public Module([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
@@ -44,25 +49,34 @@ namespace Manlaan.Clock
             _settingClockLocal = settings.DefineSetting("ClockLocal", true, "Local", "");
             _settingClockTyria = settings.DefineSetting("ClockTyria", true, "Tyria", "");
             _settingClockServer = settings.DefineSetting("ClockServer", false, "Server", "");
+            _settingClock24H = settings.DefineSetting("Clock24H", false, "24 Hour Time", "");
+            _settingClockHideLabel = settings.DefineSetting("ClockHideLabel", false, "Hide Labels", "");
             _settingClockFontSize = settings.DefineSetting("ClockFont", FontSizes.Size12, "Font Size", "");
+            _settingClockLabelAlign = settings.DefineSetting("ClockLebelAlign", HorizontalAlignment.Right, "Label Align", "");
+            _settingClockTimeAlign = settings.DefineSetting("ClockTimeAlign", HorizontalAlignment.Right, "Time Align", "");
             _settingClockX = settings.DefineSetting("ClockX", "100", "X", "");
             _settingClockY = settings.DefineSetting("ClockY", "100", "Y", "");
-        }
 
-        protected override void Initialize()
-        {
             _settingClockLocal.SettingChanged += UpdateClockSettings_Show;
             _settingClockTyria.SettingChanged += UpdateClockSettings_Show;
             _settingClockServer.SettingChanged += UpdateClockSettings_Show;
             _settingClockFontSize.SettingChanged += UpdateClockSettings_Font;
             _settingClockX.SettingChanged += UpdateClockSettings_Location;
             _settingClockY.SettingChanged += UpdateClockSettings_Location;
+            _settingClockLabelAlign.SettingChanged += UpdateClockSettings_FontAlign;
+            _settingClockTimeAlign.SettingChanged += UpdateClockSettings_FontAlign;
+            _settingClock24H.SettingChanged += UpdateClockSettings_Show;
+            _settingClockHideLabel.SettingChanged += UpdateClockSettings_Show;
+        }
 
-            _clockImg = new DrawClock();
+        protected override void Initialize()
+        {
+            _clockImg = new Control.DrawClock();
             _clockImg.Parent = GameService.Graphics.SpriteScreen;
             UpdateClockSettings_Show();
             UpdateClockSettings_Font();
             UpdateClockSettings_Location();
+            UpdateClockSettings_FontAlign();
         }
 
         protected override async Task LoadAsync()
@@ -91,6 +105,10 @@ namespace Manlaan.Clock
             _settingClockFontSize.SettingChanged -= UpdateClockSettings_Font;
             _settingClockX.SettingChanged -= UpdateClockSettings_Location;
             _settingClockY.SettingChanged -= UpdateClockSettings_Location;
+            _settingClockLabelAlign.SettingChanged -= UpdateClockSettings_FontAlign;
+            _settingClockTimeAlign.SettingChanged -= UpdateClockSettings_FontAlign;
+            _settingClock24H.SettingChanged -= UpdateClockSettings_Show;
+            _settingClockHideLabel.SettingChanged -= UpdateClockSettings_Show;
             _clockImg?.Dispose();
         }
 
@@ -99,10 +117,17 @@ namespace Manlaan.Clock
             _clockImg.ShowLocal = _settingClockLocal.Value;
             _clockImg.ShowTyria = _settingClockTyria.Value;
             _clockImg.ShowServer = _settingClockServer.Value;
+            _clockImg.Show24H = _settingClock24H.Value;
+            _clockImg.HideLabel = _settingClockHideLabel.Value;
         }
         private void UpdateClockSettings_Font(object sender = null, ValueChangedEventArgs<FontSizes> e = null)
         {
             _clockImg.Font_Size = GetFontSize(_settingClockFontSize.Value);
+        }
+        private void UpdateClockSettings_FontAlign(object sender = null, ValueChangedEventArgs<HorizontalAlignment> e = null)
+        {
+            _clockImg.LabelAlign = _settingClockLabelAlign.Value;
+            _clockImg.TimeAlign = _settingClockTimeAlign.Value;
         }
         private void UpdateClockSettings_Location(object sender = null, ValueChangedEventArgs<string> e = null)
         {
