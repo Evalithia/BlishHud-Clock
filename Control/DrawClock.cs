@@ -28,7 +28,7 @@ namespace Manlaan.Clock.Control
             this.Location = new Point(0, 0);
             this.Size = new Point(0, 0);
             this.Visible = true;
-            this.ZIndex = int.MinValue;
+            //this.ZIndex = int.MinValue;
             this.Padding = Thickness.Zero;
         }
 
