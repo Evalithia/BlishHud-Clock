@@ -34,7 +34,7 @@ namespace Manlaan.Clock.Control
 
         protected override CaptureType CapturesInput()
         {
-            return CaptureType.ForceNone;
+            return CaptureType.Filter;
         }
 
 
