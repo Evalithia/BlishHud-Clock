@@ -1,13 +1,13 @@
 {
     "name": "Clock",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "namespace": "Manlaan.Clock",
     "package": "Clock.dll",
     "manifest_version": 1,
 
     "description": "Clock for Local, Tyria, and Server time",
     "dependencies": {
-        "bh.blishhud": ">=0.7.0"
+        "bh.blishhud": ">=0.10.0"
     },
     "url": "https://github.com/manlaan/BlishHud-Clock",
     "contributors": [
