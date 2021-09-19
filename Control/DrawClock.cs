@@ -1,6 +1,7 @@
 ﻿using System;
 using Blish_HUD;
 using Blish_HUD.Controls;
+using Blish_HUD.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
@@ -14,6 +15,7 @@ namespace Manlaan.Clock.Control
         public bool ShowServer = false;
         public bool Show24H = false;
         public bool HideLabel = false;
+        public bool Drag = false;
         public ContentService.FontSize Font_Size = ContentService.FontSize.Size11;
         public DateTime LocalTime = DateTime.Now;
         public DateTime TyriaTime;
@@ -21,22 +23,49 @@ namespace Manlaan.Clock.Control
         public HorizontalAlignment LabelAlign = HorizontalAlignment.Right;
         public HorizontalAlignment TimeAlign = HorizontalAlignment.Right;
 
-        private static BitmapFont _font; 
+        private static BitmapFont _font;
+        private Point _dragStart = Point.Zero;
+        private bool _dragging;
 
         public DrawClock()
         {
             this.Location = new Point(0, 0);
             this.Size = new Point(0, 0);
             this.Visible = true;
-            //this.ZIndex = int.MinValue;
             this.Padding = Thickness.Zero;
         }
 
         protected override CaptureType CapturesInput()
         {
-            return CaptureType.Filter;
+            if (this.Drag)
+                return CaptureType.Mouse;
+            else 
+                return CaptureType.Filter;
         }
 
+        protected override void OnLeftMouseButtonPressed(MouseEventArgs e) {
+            if (Drag) {
+                _dragging = true;
+                _dragStart = Input.Mouse.Position;
+            }
+            base.OnLeftMouseButtonPressed(e);
+        }
+        protected override void OnLeftMouseButtonReleased(MouseEventArgs e) {
+            if (Drag) {
+                _dragging = false;
+                Module._settingClockLoc.Value = this.Location;
+            }
+            base.OnLeftMouseButtonPressed(e);
+        }
+
+        public override void UpdateContainer(GameTime gameTime) {
+            if (_dragging) {
+                var nOffset = Input.Mouse.Position - _dragStart;
+                Location += nOffset;
+
+                _dragStart = Input.Mouse.Position;
+            }
+        }
 
         public override void PaintBeforeChildren(SpriteBatch spriteBatch, Rectangle bounds)
         {
