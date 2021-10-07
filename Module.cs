@@ -93,6 +93,13 @@ namespace Manlaan.Clock
 
         protected override void Update(GameTime gameTime)
         {
+            if (GameService.GameIntegration.Gw2Instance.IsInGame && !GameService.Gw2Mumble.UI.IsMapOpen) {
+                _clockImg.Show();
+            }
+            else {
+                _clockImg.Hide();
+            }
+
             _clockImg.LocalTime = DateTime.Now;
             _clockImg.TyriaTime = CalcTyriaTime();
             _clockImg.ServerTime = CalcServerTime();
