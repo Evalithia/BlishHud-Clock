@@ -77,7 +77,7 @@ namespace Manlaan.Clock.Control
 
             string format = "h:mm tt";
             if (this.Show24H)
-                format = "H:mm";
+                format = "HH:mm";
 
             if (this.ShowLocal)
             {
