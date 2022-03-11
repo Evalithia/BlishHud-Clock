@@ -61,10 +61,15 @@ namespace Manlaan.Clock.Control
 
         public void EnsureLocationIsInBounds() {
             if(Location.X < 1) {
-                Location = new Point(1, this.Location.Y);
+                Location = new Point(1, Location.Y);
+            } else if(Location.X + Size.X > Parent.Size.X) {
+                Location = new Point(Parent.Size.X - Size.X, Location.Y);
             }
+
             if(Location.Y < 1) {
-                Location = new Point(this.Location.X, 1);
+                Location = new Point(Location.X, 1);
+            } else if(Location.Y + Size.Y > Parent.Size.Y) {
+                Location = new Point(Location.X, Parent.Size.Y - Size.Y);
             }
         }
 
