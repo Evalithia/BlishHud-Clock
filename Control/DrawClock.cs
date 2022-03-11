@@ -117,7 +117,8 @@ namespace Manlaan.Clock.Control
                 (int)_font.MeasureString(times).Width,
                 (int)_font.MeasureString(times).Height
                 );
-            this.Size = LabelSize + TimeSize;
+            int maxHeight = Math.Max(LabelSize.Y, TimeSize.Y);
+            this.Size = new Point(LabelSize.X + TimeSize.X, maxHeight);
 
             if (!HideLabel) 
                 spriteBatch.DrawStringOnCtrl(this,
