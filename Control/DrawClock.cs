@@ -52,7 +52,6 @@ namespace Manlaan.Clock.Control
         }
         protected override void OnLeftMouseButtonReleased(MouseEventArgs e) {
             if (Drag) {
-                EnsureLocationIsInBounds();
                 _dragging = false;
                 Module._settingClockLoc.Value = this.Location;
             }
@@ -60,23 +59,40 @@ namespace Manlaan.Clock.Control
         }
 
         public void EnsureLocationIsInBounds() {
+            Point windowSize = GameService.Graphics.SpriteScreen.Size;
+
             if(Location.X < 1) {
                 Location = new Point(1, Location.Y);
-            } else if(Location.X + Size.X > Parent.Size.X) {
-                Location = new Point(Parent.Size.X - Size.X, Location.Y);
+            } else if(Location.X + Size.X > windowSize.X) {
+                Location = new Point(windowSize.X - Size.X, Location.Y);
             }
 
             if(Location.Y < 1) {
                 Location = new Point(Location.X, 1);
-            } else if(Location.Y + Size.Y > Parent.Size.Y) {
-                Location = new Point(Location.X, Parent.Size.Y - Size.Y);
+            } else if(Location.Y + Size.Y > windowSize.Y) {
+                Location = new Point(Location.X, windowSize.Y - Size.Y);
             }
+        }
+
+        private Boolean IsPointInBounds(Point point) {
+            Point windowSize = GameService.Graphics.SpriteScreen.Size;
+
+            return point.X > 0 &&
+                    point.Y > 0 &&
+                    point.X < windowSize.X &&
+                    point.Y < windowSize.Y;
         }
 
         public override void UpdateContainer(GameTime gameTime) {
             if (_dragging) {
-                var nOffset = Input.Mouse.Position - _dragStart;
-                Location += nOffset;
+                if(IsPointInBounds(Input.Mouse.Position)) {
+                    var nOffset = Input.Mouse.Position - _dragStart;
+                    Location += nOffset;
+                    EnsureLocationIsInBounds();
+                } else {
+                    _dragging = false;
+                    Module._settingClockLoc.Value = Location;
+                }
 
                 _dragStart = Input.Mouse.Position;
             }
