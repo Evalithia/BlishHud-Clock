@@ -52,10 +52,20 @@ namespace Manlaan.Clock.Control
         }
         protected override void OnLeftMouseButtonReleased(MouseEventArgs e) {
             if (Drag) {
+                EnsureLocationIsInBounds();
                 _dragging = false;
                 Module._settingClockLoc.Value = this.Location;
             }
             base.OnLeftMouseButtonPressed(e);
+        }
+
+        public void EnsureLocationIsInBounds() {
+            if(Location.X < 1) {
+                Location = new Point(1, this.Location.Y);
+            }
+            if(Location.Y < 1) {
+                Location = new Point(this.Location.X, 1);
+            }
         }
 
         public override void UpdateContainer(GameTime gameTime) {

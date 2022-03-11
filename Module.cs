@@ -139,6 +139,7 @@ namespace Manlaan.Clock
         private void UpdateClockSettings_Location(object sender = null, ValueChangedEventArgs<Point> e = null)
         {
             _clockImg.Location = _settingClockLoc.Value;
+            _clockImg.EnsureLocationIsInBounds();
         }
         private DateTime CalcServerTime()
         {
