@@ -1,24 +1,28 @@
 {
     "name": "Clock",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "namespace": "Manlaan.Clock",
     "package": "Clock.dll",
     "manifest_version": 1,
 
     "description": "Clock for Local, Tyria, and Server time",
     "dependencies": {
-        "bh.blishhud": ">=0.11.0"
+        "bh.blishhud": ">=0.11.6"
     },
     "url": "https://github.com/manlaan/BlishHud-Clock",
     "contributors": [
         {
             "name": "Manlaan",
             "username": "manlaan.8921"
+        },
+        {
+            "name": "Nimmidev"
         }
     ]
 }
 /*
     "changelog": {
+        "1.1.2": "2022-03-12: Out of bound fixes.  Blish 0.11.6",
         "1.1.1": "2021-10-14: Added check for loading screen or map open, Upgraded to Blish 0.11.0, fixed 24Hr time to show leading zero.",
         "1.1.0": "2021-09-20: Custom Settings Panel, Drag Panel instead of coords, Upgraded to Blish 0.10.0"
     },
