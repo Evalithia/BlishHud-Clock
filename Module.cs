@@ -37,7 +37,9 @@ namespace Manlaan.Clock
         public static SettingEntry<string> _settingClockTimeAlign;
         public static SettingEntry<bool> _settingClockDrag;
         public static SettingEntry<Point> _settingClockLoc;
-        private Control.DrawClock _clockImg; 
+        private Control.DrawClock _clockImg;
+
+        private Point? lastWindowResolution = null;
 
         [ImportingConstructor]
         public Module([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
@@ -82,7 +84,11 @@ namespace Manlaan.Clock
 
 
             GameService.Graphics.SpriteScreen.Resized += delegate (object sender, ResizedEventArgs args) {
-               _clockImg.EnsureLocationIsInBounds();
+                if(lastWindowResolution != null && GameService.Graphics.Resolution != lastWindowResolution) {
+                   _clockImg.EnsureLocationIsInBounds();
+                }
+
+                lastWindowResolution = GameService.Graphics.Resolution;
             };
         }
 
