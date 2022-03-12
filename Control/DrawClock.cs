@@ -58,10 +58,41 @@ namespace Manlaan.Clock.Control
             base.OnLeftMouseButtonPressed(e);
         }
 
+        public void EnsureLocationIsInBounds() {
+            Point windowSize = GameService.Graphics.SpriteScreen.Size;
+
+            if(Location.X < 1) {
+                Location = new Point(1, Location.Y);
+            } else if(Location.X + Size.X > windowSize.X) {
+                Location = new Point(windowSize.X - Size.X, Location.Y);
+            }
+
+            if(Location.Y < 1) {
+                Location = new Point(Location.X, 1);
+            } else if(Location.Y + Size.Y > windowSize.Y) {
+                Location = new Point(Location.X, windowSize.Y - Size.Y);
+            }
+        }
+
+        private Boolean IsPointInBounds(Point point) {
+            Point windowSize = GameService.Graphics.SpriteScreen.Size;
+
+            return point.X > 0 &&
+                    point.Y > 0 &&
+                    point.X < windowSize.X &&
+                    point.Y < windowSize.Y;
+        }
+
         public override void UpdateContainer(GameTime gameTime) {
             if (_dragging) {
-                var nOffset = Input.Mouse.Position - _dragStart;
-                Location += nOffset;
+                if(IsPointInBounds(Input.Mouse.Position)) {
+                    var nOffset = Input.Mouse.Position - _dragStart;
+                    Location += nOffset;
+                    EnsureLocationIsInBounds();
+                } else {
+                    _dragging = false;
+                    Module._settingClockLoc.Value = Location;
+                }
 
                 _dragStart = Input.Mouse.Position;
             }
@@ -102,7 +133,8 @@ namespace Manlaan.Clock.Control
                 (int)_font.MeasureString(times).Width,
                 (int)_font.MeasureString(times).Height
                 );
-            this.Size = LabelSize + TimeSize;
+            int maxHeight = Math.Max(LabelSize.Y, TimeSize.Y);
+            this.Size = new Point(LabelSize.X + TimeSize.X, maxHeight);
 
             if (!HideLabel) 
                 spriteBatch.DrawStringOnCtrl(this,
