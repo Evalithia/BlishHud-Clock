@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Blish_HUD;
 using Blish_HUD.Controls;
 using Blish_HUD.Input;
@@ -13,6 +14,7 @@ namespace Manlaan.Clock.Control
         public bool ShowLocal = false;
         public bool ShowTyria = false;
         public bool ShowServer = false;
+        public bool ShowDayNight = false;
         public bool Show24H = false;
         public bool HideLabel = false;
         public bool Drag = false;
@@ -20,6 +22,7 @@ namespace Manlaan.Clock.Control
         public DateTime LocalTime = DateTime.Now;
         public DateTime TyriaTime;
         public DateTime ServerTime;
+        public string DayNightTime;
         public HorizontalAlignment LabelAlign = HorizontalAlignment.Right;
         public HorizontalAlignment TimeAlign = HorizontalAlignment.Right;
 
@@ -100,10 +103,11 @@ namespace Manlaan.Clock.Control
 
         public override void PaintBeforeChildren(SpriteBatch spriteBatch, Rectangle bounds)
         {
-            string labels = "";
-            string times = "";
+            List<string> labels = new List<string>();
+            List<string> times = new List<string>();
             Point LabelSize;
             Point TimeSize;
+            Point DayNightSize;
             _font = GameService.Content.GetFont(ContentService.FontFace.Menomonia, Font_Size, ContentService.FontStyle.Regular);
 
             string format = "h:mm tt";
@@ -112,33 +116,32 @@ namespace Manlaan.Clock.Control
 
             if (this.ShowLocal)
             {
-                if (!HideLabel) labels += " Local: \n";
-                times += " " + LocalTime.ToString(format) + " \n";
+                if (!HideLabel) labels.Add(" Local: ");
+                times.Add(" " + LocalTime.ToString(format));
             }
             if (this.ShowTyria) 
             {
-                if (!HideLabel) labels += " Tyria: \n";
-                times += " " + TyriaTime.ToString(format) + " \n";
+                if (!HideLabel) labels.Add(" Tyria: ");
+                times.Add(" " + TyriaTime.ToString(format));
             }
-            if (this.ShowServer)
-            {
-                if (!HideLabel) labels += " Server: \n";
-                times += " " + ServerTime.ToString(format) + " \n";
+            if (this.ShowServer) {
+                if (!HideLabel) labels.Add(" Server: ");
+                times.Add(" " + ServerTime.ToString(format));
             }
             LabelSize = new Point(
-                (int)_font.MeasureString(labels).Width,
-                (int)_font.MeasureString(labels).Height
+                (int)_font.MeasureString(String.Join("\n",labels)).Width,
+                (int)_font.MeasureString(String.Join("\n", labels)).Height
                 );
             TimeSize = new Point(
-                (int)_font.MeasureString(times).Width,
-                (int)_font.MeasureString(times).Height
+                (int)_font.MeasureString(String.Join("\n", times)).Width,
+                (int)_font.MeasureString(String.Join("\n", times)).Height
                 );
             int maxHeight = Math.Max(LabelSize.Y, TimeSize.Y);
             this.Size = new Point(LabelSize.X + TimeSize.X, maxHeight);
 
             if (!HideLabel) 
                 spriteBatch.DrawStringOnCtrl(this,
-                    labels,
+                    String.Join("\n", labels),
                     _font,
                     new Rectangle(0, 0, LabelSize.X, this.Size.Y),
                     Color.White,
@@ -149,7 +152,7 @@ namespace Manlaan.Clock.Control
                     VerticalAlignment.Top
                     );
             spriteBatch.DrawStringOnCtrl(this,
-                times,
+                String.Join("\n", times),
                 _font,
                 new Rectangle(LabelSize.X, 0, TimeSize.X, this.Size.Y),
                 Color.White,
@@ -159,7 +162,25 @@ namespace Manlaan.Clock.Control
                 TimeAlign,
                 VerticalAlignment.Top
                 );
+            if (this.ShowDayNight) {
+                DayNightSize = new Point(
+                    (int)_font.MeasureString(DayNightTime).Width,
+                    (int)_font.MeasureString(DayNightTime).Height
+                    );
+                this.Size = new Point(LabelSize.X + TimeSize.X, maxHeight + DayNightSize.Y);
 
+                spriteBatch.DrawStringOnCtrl(this,
+                    DayNightTime,
+                    _font,
+                    new Rectangle(0, maxHeight, TimeSize.X + LabelSize.X, DayNightSize.Y),
+                    Color.White,
+                    false,
+                    true,
+                    1,
+                    LabelAlign,
+                    VerticalAlignment.Top
+                    );
+            }
         }
 
     }

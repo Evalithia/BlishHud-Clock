@@ -8,6 +8,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 using Blish_HUD.Graphics.UI;
+using static Blish_HUD.GameService;
 
 namespace Manlaan.Clock
 {
@@ -30,6 +31,7 @@ namespace Manlaan.Clock
         public static SettingEntry<bool> _settingClockLocal;
         public static SettingEntry<bool> _settingClockTyria;
         public static SettingEntry<bool> _settingClockServer;
+        public static SettingEntry<bool> _settingClockDayNight;
         public static SettingEntry<bool> _settingClock24H;
         public static SettingEntry<bool> _settingClockHideLabel;
         public static SettingEntry<string> _settingClockFontSize;
@@ -50,6 +52,7 @@ namespace Manlaan.Clock
             _settingClockLocal = settings.DefineSetting("ClockLocal", true, "Local", "");
             _settingClockTyria = settings.DefineSetting("ClockTyria", true, "Tyria", "");
             _settingClockServer = settings.DefineSetting("ClockServer", false, "Server", "");
+            _settingClockDayNight = settings.DefineSetting("ClockDay", false, "Day/Night", "");
             _settingClock24H = settings.DefineSetting("Clock24H", false, "24 Hour Time", "");
             _settingClockHideLabel = settings.DefineSetting("ClockHideLabel", false, "Hide Labels", "");
             _settingClockFontSize = settings.DefineSetting("ClockFont2", "12", "Font Size", "");
@@ -62,6 +65,7 @@ namespace Manlaan.Clock
             _settingClockLocal.SettingChanged += UpdateClockSettings_Show;
             _settingClockTyria.SettingChanged += UpdateClockSettings_Show;
             _settingClockServer.SettingChanged += UpdateClockSettings_Show;
+            _settingClockDayNight.SettingChanged += UpdateClockSettings_Show;
             _settingClockFontSize.SettingChanged += UpdateClockSettings_Font;
             _settingClockLoc.SettingChanged += UpdateClockSettings_Location;
             _settingClockLabelAlign.SettingChanged += UpdateClockSettings_Font;
@@ -114,6 +118,7 @@ namespace Manlaan.Clock
             _clockImg.LocalTime = DateTime.Now;
             _clockImg.TyriaTime = CalcTyriaTime();
             _clockImg.ServerTime = CalcServerTime();
+            _clockImg.DayNightTime = CalcDayNightTime();
         }
 
         /// <inheritdoc />
@@ -123,6 +128,7 @@ namespace Manlaan.Clock
             _settingClockLocal.SettingChanged -= UpdateClockSettings_Show;
             _settingClockTyria.SettingChanged -= UpdateClockSettings_Show;
             _settingClockServer.SettingChanged -= UpdateClockSettings_Show;
+            _settingClockDayNight.SettingChanged -= UpdateClockSettings_Show;
             _settingClockFontSize.SettingChanged -= UpdateClockSettings_Font;
             _settingClockLoc.SettingChanged -= UpdateClockSettings_Location;
             _settingClockLabelAlign.SettingChanged -= UpdateClockSettings_Font;
@@ -137,6 +143,7 @@ namespace Manlaan.Clock
             _clockImg.ShowLocal = _settingClockLocal.Value;
             _clockImg.ShowTyria = _settingClockTyria.Value;
             _clockImg.ShowServer = _settingClockServer.Value;
+            _clockImg.ShowDayNight = _settingClockDayNight.Value;
             _clockImg.Show24H = _settingClock24H.Value;
             _clockImg.HideLabel = _settingClockHideLabel.Value;
             _clockImg.Drag = _settingClockDrag.Value;
@@ -156,10 +163,8 @@ namespace Manlaan.Clock
             
             return DateTime.UtcNow;
         }
-        private DateTime CalcTyriaTime()
-        {
-            try
-            {
+        private DateTime CalcTyriaTime() {
+            try {
                 DateTime UTC = DateTime.UtcNow;
                 int utcsec = utcsec = (UTC.Hour * 3600) + (UTC.Minute * 60) + UTC.Second;
                 int tyriasec = (utcsec * 12) - 60;
@@ -169,13 +174,54 @@ namespace Manlaan.Clock
                 int tyrianmin = (int)(tyriasec / 60);
                 tyriasec = tyriasec % 60;
                 return new DateTime(2000, 1, 1, tyrianhour, tyrianmin, tyriasec);
-            } catch
-            {
+            }
+            catch {
                 return new DateTime(2000, 1, 1, 0, 0, 0);
             }
 
         }
-    
+        private string CalcDayNightTime() {
+            DateTime TyriaTime = CalcTyriaTime();
+            int Map = Gw2Mumble.CurrentMap.Id;
+
+            if (Map == 1452 /*Echovald*/ || Map == 1442 /*Seitung*/ || Map == 1438 /*Kaineng*/ || Map == 1422 /*Dragon's End*/ || Map == 1462 /*Guild Hall*/ ) {   //Cantha Maps
+                if (TyriaTime >= new DateTime(2000, 1, 1, 8, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 18, 0, 0)) {
+                    return "Day";
+                }
+                if (TyriaTime >= new DateTime(2000, 1, 1, 18, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 19, 0, 0)) {
+                    return "Day+";
+                }
+                if (TyriaTime >= new DateTime(2000, 1, 1, 19, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 20, 0, 0)) {
+                    return "Dusk";
+                }
+                if (TyriaTime >= new DateTime(2000, 1, 1, 6, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 7, 0, 0)) {
+                    return "Night+";
+                }
+                if (TyriaTime >= new DateTime(2000, 1, 1, 7, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 8, 0, 0)) {
+                    return "Dawn";
+                }
+                return "Night";
+            }
+            else {
+                if (TyriaTime >= new DateTime(2000, 1, 1, 6, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 19, 0, 0)) {
+                    return "Day";
+                }
+                if (TyriaTime >= new DateTime(2000, 1, 1, 19, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 20, 0, 0)) {
+                    return "Day+";
+                }
+                if (TyriaTime >= new DateTime(2000, 1, 1, 20, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 21, 0, 0)) {
+                    return "Dusk";
+                }
+                if (TyriaTime >= new DateTime(2000, 1, 1, 4, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 5, 0, 0)) {
+                    return "Night+";
+                }
+                if (TyriaTime >= new DateTime(2000, 1, 1, 5, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 6, 0, 0)) {
+                    return "Dawn";
+                }
+                return "Night";
+            }
+        }
+
     }
 
 }

@@ -42,10 +42,18 @@ namespace Manlaan.Clock.Views
             };
             settingClockServer_Container.Show(settingClockServer_View);
 
+            IView settingClockDayNight_View = SettingView.FromType(Module._settingClockDayNight, buildPanel.Width);
+            ViewContainer settingClockDayNight_Container = new ViewContainer() {
+                WidthSizingMode = SizingMode.Fill,
+                Location = new Point(460, settingClockLocal_Container.Location.Y),
+                Parent = parentPanel
+            };
+            settingClockDayNight_Container.Show(settingClockDayNight_View);
+
             IView settingClock24H_View = SettingView.FromType(Module._settingClock24H, buildPanel.Width);
             ViewContainer settingClock24H_Container = new ViewContainer() {
                 WidthSizingMode = SizingMode.Fill,
-                Location = new Point(10, settingClockServer_Container.Bottom + 5),
+                Location = new Point(10, settingClockLocal_Container.Bottom + 5),
                 Parent = parentPanel
             };
             settingClock24H_Container.Show(settingClock24H_View);

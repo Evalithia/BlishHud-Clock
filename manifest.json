@@ -1,6 +1,6 @@
 {
     "name": "Clock",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "namespace": "Manlaan.Clock",
     "package": "Clock.dll",
     "manifest_version": 1,
@@ -22,6 +22,7 @@
 }
 /*
     "changelog": {
+        "1.2.0": "2022-03-14: Day/Night Display",
         "1.1.2": "2022-03-12: Out of bound fixes.  Blish 0.11.6",
         "1.1.1": "2021-10-14: Added check for loading screen or map open, Upgraded to Blish 0.11.0, fixed 24Hr time to show leading zero.",
         "1.1.0": "2021-09-20: Custom Settings Panel, Drag Panel instead of coords, Upgraded to Blish 0.10.0"
