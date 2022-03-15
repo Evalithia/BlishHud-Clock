@@ -56,12 +56,35 @@ namespace Manlaan.Clock.Control
         protected override void OnLeftMouseButtonReleased(MouseEventArgs e) {
             if (Drag) {
                 _dragging = false;
-                Module._settingClockLoc.Value = this.Location;
+                saveClockLocation();
             }
             base.OnLeftMouseButtonPressed(e);
         }
 
-        public void EnsureLocationIsInBounds() {
+        public void restoreClockLocation() {
+            Point windowSize = GameService.Graphics.SpriteScreen.Size;
+            Vector2 relativeLocation = Module._settingClockLoc.Value;
+            int locationX = (int) (relativeLocation.X * windowSize.X);
+            int locationY = (int) (relativeLocation.Y * windowSize.Y);
+
+            if(locationX == 0)
+                locationX = 1;
+            if(locationY == 0)
+                locationY = 1;
+
+            Location = new Point(locationX, locationY);
+            EnsureLocationIsInBounds();
+        }
+
+        private void saveClockLocation() {
+            EnsureLocationIsInBounds();
+
+            Point windowSize = GameService.Graphics.SpriteScreen.Size;
+            Vector2 relativeLocation = new Vector2((float) Location.X / windowSize.X, (float) Location.Y / windowSize.Y);
+            Module._settingClockLoc.Value = relativeLocation;
+        }
+
+        private void EnsureLocationIsInBounds() {
             Point windowSize = GameService.Graphics.SpriteScreen.Size;
 
             if(Location.X < 1) {
@@ -94,7 +117,7 @@ namespace Manlaan.Clock.Control
                     EnsureLocationIsInBounds();
                 } else {
                     _dragging = false;
-                    Module._settingClockLoc.Value = Location;
+                    saveClockLocation();
                 }
 
                 _dragStart = Input.Mouse.Position;
