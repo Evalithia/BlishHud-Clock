@@ -190,7 +190,7 @@ namespace Manlaan.Clock.Control
                     (int)_font.MeasureString(DayNightTime).Width,
                     (int)_font.MeasureString(DayNightTime).Height
                     );
-                this.Size = new Point(LabelSize.X + TimeSize.X, maxHeight + DayNightSize.Y);
+                this.Size = new Point(Math.Max(LabelSize.X + TimeSize.X, DayNightSize.X), maxHeight + DayNightSize.Y);
 
                 spriteBatch.DrawStringOnCtrl(this,
                     DayNightTime,
