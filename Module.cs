@@ -38,10 +38,8 @@ namespace Manlaan.Clock
         public static SettingEntry<string> _settingClockLabelAlign;
         public static SettingEntry<string> _settingClockTimeAlign;
         public static SettingEntry<bool> _settingClockDrag;
-        public static SettingEntry<Point> _settingClockLoc;
+        public static SettingEntry<Vector2> _settingClockLoc;
         private Control.DrawClock _clockImg;
-
-        private Point? lastWindowResolution = null;
 
         [ImportingConstructor]
         public Module([Import("ModuleParameters")] ModuleParameters moduleParameters) : base(moduleParameters) { }
@@ -58,7 +56,7 @@ namespace Manlaan.Clock
             _settingClockFontSize = settings.DefineSetting("ClockFont2", "12", "Font Size", "");
             _settingClockLabelAlign = settings.DefineSetting("ClockLebelAlign2", "Right", "Label Align", "");
             _settingClockTimeAlign = settings.DefineSetting("ClockTimeAlign2", "Right", "Time Align", "");
-            _settingClockLoc = settings.DefineSetting("ClockLoc", new Point(100,100), "Location", "");
+            _settingClockLoc = settings.DefineSetting("ClockLoc", new Vector2(0.25f, 0.25f), "Location", "");
             _settingClockDrag = settings.DefineSetting("ClockDrag", false, "Enable Dragging", "");
 
             _settingClockDrag.SettingChanged += UpdateClockSettings_Show;
@@ -88,11 +86,7 @@ namespace Manlaan.Clock
 
 
             GameService.Graphics.SpriteScreen.Resized += delegate (object sender, ResizedEventArgs args) {
-                if(lastWindowResolution != null && GameService.Graphics.Resolution != lastWindowResolution) {
-                   _clockImg.EnsureLocationIsInBounds();
-                }
-
-                lastWindowResolution = GameService.Graphics.Resolution;
+                _clockImg.restoreClockLocation();
             };
         }
 
@@ -154,9 +148,9 @@ namespace Manlaan.Clock
             _clockImg.LabelAlign = (HorizontalAlignment) Enum.Parse(typeof(HorizontalAlignment), _settingClockLabelAlign.Value);
             _clockImg.TimeAlign = (HorizontalAlignment)Enum.Parse(typeof(HorizontalAlignment), _settingClockTimeAlign.Value);
         }
-        private void UpdateClockSettings_Location(object sender = null, ValueChangedEventArgs<Point> e = null)
+        private void UpdateClockSettings_Location(object sender = null, ValueChangedEventArgs<Vector2> e = null)
         {
-            _clockImg.Location = _settingClockLoc.Value;
+            _clockImg.restoreClockLocation();
         }
         private DateTime CalcServerTime()
         {
