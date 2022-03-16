@@ -22,7 +22,7 @@
 }
 /*
     "changelog": {
-        "1.2.1": "2022-03-15: Fix for positioning",
+        "1.2.1": "2022-03-14: Undo PR changes, add check for location, fix day/night to show if no times selected",
         "1.2.0": "2022-03-14: Day/Night Display",
         "1.1.2": "2022-03-12: Out of bound fixes.  Blish 0.11.6",
         "1.1.1": "2021-10-14: Added check for loading screen or map open, Upgraded to Blish 0.11.0, fixed 24Hr time to show leading zero.",

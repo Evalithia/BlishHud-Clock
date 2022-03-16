@@ -56,48 +56,9 @@ namespace Manlaan.Clock.Control
         protected override void OnLeftMouseButtonReleased(MouseEventArgs e) {
             if (Drag) {
                 _dragging = false;
-                saveClockLocation();
+                Module._settingClockLoc.Value = this.Location;
             }
             base.OnLeftMouseButtonPressed(e);
-        }
-
-        public void restoreClockLocation() {
-            Point windowSize = GameService.Graphics.SpriteScreen.Size;
-            Vector2 relativeLocation = Module._settingClockLoc.Value;
-            int locationX = (int) (relativeLocation.X * windowSize.X);
-            int locationY = (int) (relativeLocation.Y * windowSize.Y);
-
-            if(locationX == 0)
-                locationX = 1;
-            if(locationY == 0)
-                locationY = 1;
-
-            Location = new Point(locationX, locationY);
-            EnsureLocationIsInBounds();
-        }
-
-        private void saveClockLocation() {
-            EnsureLocationIsInBounds();
-
-            Point windowSize = GameService.Graphics.SpriteScreen.Size;
-            Vector2 relativeLocation = new Vector2((float) Location.X / windowSize.X, (float) Location.Y / windowSize.Y);
-            Module._settingClockLoc.Value = relativeLocation;
-        }
-
-        private void EnsureLocationIsInBounds() {
-            Point windowSize = GameService.Graphics.SpriteScreen.Size;
-
-            if(Location.X < 1) {
-                Location = new Point(1, Location.Y);
-            } else if(Location.X + Size.X > windowSize.X) {
-                Location = new Point(windowSize.X - Size.X, Location.Y);
-            }
-
-            if(Location.Y < 1) {
-                Location = new Point(Location.X, 1);
-            } else if(Location.Y + Size.Y > windowSize.Y) {
-                Location = new Point(Location.X, windowSize.Y - Size.Y);
-            }
         }
 
         private Boolean IsPointInBounds(Point point) {
@@ -114,12 +75,10 @@ namespace Manlaan.Clock.Control
                 if(IsPointInBounds(Input.Mouse.Position)) {
                     var nOffset = Input.Mouse.Position - _dragStart;
                     Location += nOffset;
-                    EnsureLocationIsInBounds();
                 } else {
                     _dragging = false;
-                    saveClockLocation();
+                    Module._settingClockLoc.Value = this.Location;
                 }
-
                 _dragStart = Input.Mouse.Position;
             }
         }
@@ -130,7 +89,6 @@ namespace Manlaan.Clock.Control
             List<string> times = new List<string>();
             Point LabelSize;
             Point TimeSize;
-            Point DayNightSize;
             _font = GameService.Content.GetFont(ContentService.FontFace.Menomonia, Font_Size, ContentService.FontStyle.Regular);
 
             string format = "h:mm tt";
@@ -150,6 +108,10 @@ namespace Manlaan.Clock.Control
             if (this.ShowServer) {
                 if (!HideLabel) labels.Add(" Server: ");
                 times.Add(" " + ServerTime.ToString(format));
+            }
+            if (this.ShowDayNight) {
+                if (!HideLabel) labels.Add(" ");
+                times.Add(" " + DayNightTime);
             }
             LabelSize = new Point(
                 (int)_font.MeasureString(String.Join("\n",labels)).Width,
@@ -185,25 +147,6 @@ namespace Manlaan.Clock.Control
                 TimeAlign,
                 VerticalAlignment.Top
                 );
-            if (this.ShowDayNight) {
-                DayNightSize = new Point(
-                    (int)_font.MeasureString(DayNightTime).Width,
-                    (int)_font.MeasureString(DayNightTime).Height
-                    );
-                this.Size = new Point(Math.Max(LabelSize.X + TimeSize.X, DayNightSize.X), maxHeight + DayNightSize.Y);
-
-                spriteBatch.DrawStringOnCtrl(this,
-                    DayNightTime,
-                    _font,
-                    new Rectangle(0, maxHeight, TimeSize.X + LabelSize.X, DayNightSize.Y),
-                    Color.White,
-                    false,
-                    true,
-                    1,
-                    LabelAlign,
-                    VerticalAlignment.Top
-                    );
-            }
         }
 
     }
