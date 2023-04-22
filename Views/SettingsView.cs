@@ -18,10 +18,19 @@ namespace Manlaan.Clock.Views
                 Width = 700,  //bug? with buildPanel.Width changing to 40 after loading a different module settings and coming back.,
             };
 
+            IView settingClockServer_View = SettingView.FromType(Module._settingClockServer, buildPanel.Width);
+            ViewContainer settingClockServer_Container = new ViewContainer()
+            {
+                WidthSizingMode = SizingMode.Fill,
+                Location = new Point(10, 10),
+
+                Parent = parentPanel
+            };
+
             IView settingClockLocal_View = SettingView.FromType(Module._settingClockLocal, buildPanel.Width);
             ViewContainer settingClockLocal_Container = new ViewContainer() {
                 WidthSizingMode = SizingMode.Fill,
-                Location = new Point(10, 10),
+                Location = new Point(160, settingClockServer_Container.Location.Y),
                 Parent = parentPanel
             };
             settingClockLocal_Container.Show(settingClockLocal_View);
@@ -29,17 +38,12 @@ namespace Manlaan.Clock.Views
             IView settingClockTyria_View = SettingView.FromType(Module._settingClockTyria, buildPanel.Width);
             ViewContainer settingClockTyria_Container = new ViewContainer() {
                 WidthSizingMode = SizingMode.Fill,
-                Location = new Point(160, settingClockLocal_Container.Location.Y),
+                Location = new Point(310, settingClockLocal_Container.Location.Y),
                 Parent = parentPanel
             };
             settingClockTyria_Container.Show(settingClockTyria_View);
 
-            IView settingClockServer_View = SettingView.FromType(Module._settingClockServer, buildPanel.Width);
-            ViewContainer settingClockServer_Container = new ViewContainer() {
-                WidthSizingMode = SizingMode.Fill,
-                Location = new Point(310, settingClockLocal_Container.Location.Y),
-                Parent = parentPanel
-            };
+
             settingClockServer_Container.Show(settingClockServer_View);
 
             IView settingClockDayNight_View = SettingView.FromType(Module._settingClockDayNight, buildPanel.Width);
@@ -65,6 +69,15 @@ namespace Manlaan.Clock.Views
                 Parent = parentPanel
             };
             settingClockHideLabel_Container.Show(settingClockHideLabel_View);
+
+            IView settingFlatClock_View = SettingView.FromType(Module._settingFlatClock, buildPanel.Width);
+            ViewContainer settingFlatClock_Container = new ViewContainer()
+            {
+                WidthSizingMode = SizingMode.Fill,
+                Location = new Point(310, settingClock24H_Container.Location.Y),
+                Parent = parentPanel
+            };
+            settingFlatClock_Container.Show(settingFlatClock_View);
 
 
             Label settingClockFontSize_Label = new Label() {

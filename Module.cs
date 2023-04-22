@@ -28,17 +28,19 @@ namespace Manlaan.Clock
         //Doing this because using ContentServices.FontSize in SettingEntry shows "0" on settings page.
         public static string[] _fontSizes = new string[] { "8", "11", "12", "14", "16", "18", "20", "22", "24", "32", "34", "36" };
         public static string[] _fontAlign = new string[] { "Left", "Center", "Right" };
+        public static SettingEntry<bool> _settingFlatClock;
         public static SettingEntry<bool> _settingClockLocal;
         public static SettingEntry<bool> _settingClockTyria;
         public static SettingEntry<bool> _settingClockServer;
         public static SettingEntry<bool> _settingClockDayNight;
         public static SettingEntry<bool> _settingClock24H;
-        public static SettingEntry<bool> _settingClockHideLabel;
+        public static SettingEntry<bool> _settingClockHideLabel; 
         public static SettingEntry<string> _settingClockFontSize;
         public static SettingEntry<string> _settingClockLabelAlign;
         public static SettingEntry<string> _settingClockTimeAlign;
         public static SettingEntry<bool> _settingClockDrag;
         public static SettingEntry<Point> _settingClockLoc;
+        public int settingFontSizeSmall;
         private Control.DrawClock _clockImg;
 
         [ImportingConstructor]
@@ -46,13 +48,13 @@ namespace Manlaan.Clock
 
         protected override void DefineSettings(SettingCollection settings)
         {
-            
+            _settingFlatClock = settings.DefineSetting("FlatClock", false, "Flat Clock (FFXIV Style)", "");
             _settingClockLocal = settings.DefineSetting("ClockLocal", true, "Local", "");
             _settingClockTyria = settings.DefineSetting("ClockTyria", true, "Tyria", "");
             _settingClockServer = settings.DefineSetting("ClockServer", false, "Server", "");
             _settingClockDayNight = settings.DefineSetting("ClockDay", false, "Day/Night", "");
             _settingClock24H = settings.DefineSetting("Clock24H", false, "24 Hour Time", "");
-            _settingClockHideLabel = settings.DefineSetting("ClockHideLabel", false, "Hide Labels", "");
+            _settingClockHideLabel = settings.DefineSetting("ClockHideLabel", false, "Hide Labels", ""); 
             _settingClockFontSize = settings.DefineSetting("ClockFont2", "12", "Font Size", "");
             _settingClockLabelAlign = settings.DefineSetting("ClockLebelAlign2", "Right", "Label Align", "");
             _settingClockTimeAlign = settings.DefineSetting("ClockTimeAlign2", "Right", "Time Align", "");
@@ -70,6 +72,7 @@ namespace Manlaan.Clock
             _settingClockTimeAlign.SettingChanged += UpdateClockSettings_Font;
             _settingClock24H.SettingChanged += UpdateClockSettings_Show;
             _settingClockHideLabel.SettingChanged += UpdateClockSettings_Show;
+            _settingFlatClock.SettingChanged += UpdateClockSettings_Show;
         }
         public override IView GetSettingsView() {
             return new Clock.Views.SettingsView();
@@ -123,6 +126,7 @@ namespace Manlaan.Clock
             _settingClockTimeAlign.SettingChanged -= UpdateClockSettings_Font;
             _settingClock24H.SettingChanged -= UpdateClockSettings_Show;
             _settingClockHideLabel.SettingChanged -= UpdateClockSettings_Show;
+            _settingFlatClock.SettingChanged -= UpdateClockSettings_Show;
             _clockImg?.Dispose();
         }
 
@@ -134,11 +138,15 @@ namespace Manlaan.Clock
             _clockImg.ShowDayNight = _settingClockDayNight.Value;
             _clockImg.Show24H = _settingClock24H.Value;
             _clockImg.HideLabel = _settingClockHideLabel.Value;
+            _clockImg.FlatClock = _settingFlatClock.Value;
             _clockImg.Drag = _settingClockDrag.Value;
         }
+        
         private void UpdateClockSettings_Font(object sender = null, ValueChangedEventArgs<string> e = null)
         {
+            settingFontSizeSmall = Int32.Parse(_settingClockFontSize.Value) - 2;
             _clockImg.Font_Size = (ContentService.FontSize) Enum.Parse(typeof(ContentService.FontSize), "Size" + _settingClockFontSize.Value);
+            _clockImg.Font_Size_Small = (ContentService.FontSize)Enum.Parse(typeof(ContentService.FontSize), "Size" + settingFontSizeSmall.ToString());
             _clockImg.LabelAlign = (HorizontalAlignment) Enum.Parse(typeof(HorizontalAlignment), _settingClockLabelAlign.Value);
             _clockImg.TimeAlign = (HorizontalAlignment)Enum.Parse(typeof(HorizontalAlignment), _settingClockTimeAlign.Value);
         }
@@ -180,13 +188,13 @@ namespace Manlaan.Clock
                     return "Day";
                 }
                 if (TyriaTime >= new DateTime(2000, 1, 1, 18, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 19, 0, 0)) {
-                    return "Day+";
+                    return "Day";
                 }
                 if (TyriaTime >= new DateTime(2000, 1, 1, 19, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 20, 0, 0)) {
                     return "Dusk";
                 }
                 if (TyriaTime >= new DateTime(2000, 1, 1, 6, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 7, 0, 0)) {
-                    return "Night+";
+                    return "Night";
                 }
                 if (TyriaTime >= new DateTime(2000, 1, 1, 7, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 8, 0, 0)) {
                     return "Dawn";
@@ -198,13 +206,13 @@ namespace Manlaan.Clock
                     return "Day";
                 }
                 if (TyriaTime >= new DateTime(2000, 1, 1, 19, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 20, 0, 0)) {
-                    return "Day+";
+                    return "Day";
                 }
                 if (TyriaTime >= new DateTime(2000, 1, 1, 20, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 21, 0, 0)) {
                     return "Dusk";
                 }
                 if (TyriaTime >= new DateTime(2000, 1, 1, 4, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 5, 0, 0)) {
-                    return "Night+";
+                    return "Night";
                 }
                 if (TyriaTime >= new DateTime(2000, 1, 1, 5, 0, 0) && TyriaTime < new DateTime(2000, 1, 1, 6, 0, 0)) {
                     return "Dawn";
