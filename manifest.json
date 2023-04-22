@@ -26,7 +26,7 @@
 }
 /*
     "changelog": {
-       "1.2.1E": "2023-04-23: Added flat clock, fixed some font alignment",
+       "1.2.1E": "2023-04-22: Added flat clock, fixed some font alignment",
         "1.2.1": "2022-03-14: Undo PR changes, add check for location, fix day/night to show if no times selected",
         "1.2.0": "2022-03-14: Day/Night Display",
         "1.1.2": "2022-03-12: Out of bound fixes.  Blish 0.11.6",
