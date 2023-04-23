@@ -94,6 +94,7 @@ namespace Manlaan.Clock.Control
             List<string> ampm = new List<string>();                 //all this AMPM stuff is to help align a horribly nonmonospaced font
             List<string> placeholderTimes = new List<string>();     //so when a minute changes from for example :20 to :21, the width of the time column doesn't shift slightly over
             List<string> placeholderFlatClock = new List<string>(); 
+            //initialize all these variables to empty strings so if you disable a clock it won't calculate the gap
             string flClockS = "";
             string flClockL = "";
             string flClockT = "";
@@ -189,7 +190,7 @@ namespace Manlaan.Clock.Control
                 flClockL = " " + LocalTime.ToString(format);
                 if (!this.Show24H)
                 {
-                    ampmcutL = ServerTime.ToString(afterformat);
+                    ampmcutL = LocalTime.ToString(afterformat);
                     ampmcutLa = " " + ampmcutL.Substring(ampmcutL.Length - 2);
                     ampmcutLp = " XM";
                     placeholderFlatClock.Add(ampmcutLp);
@@ -238,13 +239,18 @@ namespace Manlaan.Clock.Control
                 placeholderFlatClock.Add(flClockTp);
                 placeholderFlatClock.Add(flTimeFixT);
             }
-            if (this.ShowDayNight)
+            else if (this.ShowDayNight && !this.ShowTyria && !FlatClock)
             {
                 if (!HideLabel) labels.Add(" ");
                 times.Add(" " + DayNightTime);
+            }
+            if (this.ShowDayNight && FlatClock)
+            {
                 flClockDN = "  " + DayNightTime;
                 placeholderFlatClock.Add("  " + DayNightTime);
             }
+
+
 
             if (!FlatClock)
             {
@@ -364,9 +370,9 @@ namespace Manlaan.Clock.Control
                     );
                 int firstDistance = flClockSizeS.X + flAMPMSizeS.X + flFixSizeS.X;
                 int secondDistance = firstDistance + flClockSizeL.X + flAMPMSizeL.X + flFixSizeL.X;
+                this.Size = new Point(flClockSizePlaceholder.X, flClockSizePlaceholder.Y);
 
-
-                this.Size = new Point(flClockSizeS.X, flClockSizeS.Y);
+                //this.Size = new Point(flClockSizeS.X, flClockSizeS.Y);
 
                 spriteBatch.DrawStringOnCtrl(this,
                     flClockS,
@@ -379,7 +385,7 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Right,
                     VerticalAlignment.Bottom
                     );
-                this.Size = new Point(flAMPMSizeS.X, flAMPMSizeS.Y);
+                //this.Size = new Point(flAMPMSizeS.X, flAMPMSizeS.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     ampmcutSa,
                     _font,
@@ -391,7 +397,7 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Left,
                     VerticalAlignment.Bottom
                     );
-                this.Size = new Point(flFixSizeS.X, flFixSizeS.Y);
+                //this.Size = new Point(flFixSizeS.X, flFixSizeS.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     flTimeFixS,
                     _fontSmall,
@@ -404,7 +410,7 @@ namespace Manlaan.Clock.Control
                     VerticalAlignment.Bottom
                     );
 
-                this.Size = new Point(flClockSizeL.X, flClockSizeL.Y);
+                //this.Size = new Point(flClockSizeL.X, flClockSizeL.Y);
 
                 spriteBatch.DrawStringOnCtrl(this,
                     flClockL,
@@ -417,7 +423,7 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Right,
                     VerticalAlignment.Bottom
                     );
-                this.Size = new Point(flAMPMSizeL.X, flAMPMSizeL.Y);
+                //this.Size = new Point(flAMPMSizeL.X, flAMPMSizeL.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     ampmcutLa,
                     _font,
@@ -429,7 +435,7 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Left,
                     VerticalAlignment.Bottom
                     );
-                this.Size = new Point(flFixSizeL.X, flFixSizeL.Y);
+                //this.Size = new Point(flFixSizeL.X, flFixSizeL.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     flTimeFixL,
                     _fontSmall,
@@ -442,7 +448,7 @@ namespace Manlaan.Clock.Control
                     VerticalAlignment.Bottom
                     );
 
-                this.Size = new Point(flClockSizeT.X, flClockSizeT.Y);
+                //this.Size = new Point(flClockSizeT.X, flClockSizeT.Y);
 
                 spriteBatch.DrawStringOnCtrl(this,
                     flClockT,
@@ -455,7 +461,7 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Right,
                     VerticalAlignment.Bottom
                     );
-                this.Size = new Point(flAMPMSizeT.X, flAMPMSizeT.Y);
+                //this.Size = new Point(flAMPMSizeT.X, flAMPMSizeT.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     ampmcutTa,
                     _font,
@@ -467,7 +473,7 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Left,
                     VerticalAlignment.Bottom
                     );
-                this.Size = new Point(flFixSizeT.X, flFixSizeT.Y);
+                //this.Size = new Point(flFixSizeT.X, flFixSizeT.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     flTimeFixT,
                     _fontSmall,
@@ -479,7 +485,7 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Left,
                     VerticalAlignment.Bottom
                     );
-                this.Size = new Point(flDNSize.X, flDNSize.Y);
+                //this.Size = new Point(flDNSize.X, flDNSize.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     flClockDN,
                     _font,
@@ -491,7 +497,7 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Left,
                     VerticalAlignment.Bottom
                     );
-                this.Size = new Point(flClockSizePlaceholder.X, flClockSizePlaceholder.Y);
+                //this.Size = new Point(flClockSizePlaceholder.X, flClockSizePlaceholder.Y);
             }
         }
 
