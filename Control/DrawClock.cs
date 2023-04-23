@@ -158,16 +158,16 @@ namespace Manlaan.Clock.Control
             }
             else if (this.ShowServer && FlatClock)
             {
-                flClockS = "  " + ServerTime.ToString(format) + " ";
+                flClockS = " " + ServerTime.ToString(format);
                 if (!this.Show24H)
                 {
                     ampmcutS = ServerTime.ToString(afterformat);
-                    ampmcutSa = ampmcutS.Substring(ampmcutS.Length - 2);
-                    ampmcutSp = "MM";
+                    ampmcutSa = " " + ampmcutS.Substring(ampmcutS.Length - 2);
+                    ampmcutSp = " XM";
                     placeholderFlatClock.Add(ampmcutSp);
                 }
-                flClockSp = "00:00";
-                flTimeFixS = "ST ";
+                flClockSp = " 00:00";
+                flTimeFixS = " ST";
                 placeholderFlatClock.Add(flClockSp);
                 placeholderFlatClock.Add(flTimeFixS);
             }
@@ -186,16 +186,16 @@ namespace Manlaan.Clock.Control
             }
             else if (this.ShowLocal && FlatClock)
             {
-                flClockL = "  " + LocalTime.ToString(format) + " ";
+                flClockL = " " + LocalTime.ToString(format);
                 if (!this.Show24H)
                 {
                     ampmcutL = ServerTime.ToString(afterformat);
-                    ampmcutLa = ampmcutL.Substring(ampmcutL.Length - 2);
-                    ampmcutLp = "MM";
+                    ampmcutLa = " " + ampmcutL.Substring(ampmcutL.Length - 2);
+                    ampmcutLp = " XM";
                     placeholderFlatClock.Add(ampmcutLp);
                 }
-                flClockLp = "00:00";
-                flTimeFixL = "LT ";
+                flClockLp = " 00:00";
+                flTimeFixL = " LT";
                 placeholderFlatClock.Add(flClockLp);
                 placeholderFlatClock.Add(flTimeFixL);
             }
@@ -225,16 +225,16 @@ namespace Manlaan.Clock.Control
             }
             else if (this.ShowTyria && FlatClock)
             {
-                flClockT = "  " + TyriaTime.ToString(format) + " ";
+                flClockT = " " + TyriaTime.ToString(format);
                 if (!this.Show24H)
                 {
                     ampmcutT = TyriaTime.ToString(afterformat);
-                    ampmcutTa = ampmcutT.Substring(ampmcutT.Length - 2);
-                    ampmcutTp = "MM";
+                    ampmcutTa = " " + ampmcutT.Substring(ampmcutT.Length - 2);
+                    ampmcutTp =  " XM";
                     placeholderFlatClock.Add(ampmcutTp);
                 }
-                flClockTp = "00:00";
-                flTimeFixT = "TT ";
+                flClockTp = " 00:00";
+                flTimeFixT = " TT";
                 placeholderFlatClock.Add(flClockTp);
                 placeholderFlatClock.Add(flTimeFixT);
             }
@@ -242,7 +242,7 @@ namespace Manlaan.Clock.Control
             {
                 if (!HideLabel) labels.Add(" ");
                 times.Add(" " + DayNightTime);
-                flClockDN = " " + DayNightTime;
+                flClockDN = "  " + DayNightTime;
                 placeholderFlatClock.Add("  " + DayNightTime);
             }
 
@@ -366,7 +366,7 @@ namespace Manlaan.Clock.Control
                 int secondDistance = firstDistance + flClockSizeL.X + flAMPMSizeL.X + flFixSizeL.X;
 
 
-                this.Size = new Point(flClockSizePlaceholder.X, flClockSizePlaceholder.Y);
+                this.Size = new Point(flClockSizeS.X, flClockSizeS.Y);
 
                 spriteBatch.DrawStringOnCtrl(this,
                     flClockS,
@@ -376,13 +376,14 @@ namespace Manlaan.Clock.Control
                     false,
                     true,
                     1,
-                    HorizontalAlignment.Left,
+                    HorizontalAlignment.Right,
                     VerticalAlignment.Bottom
                     );
+                this.Size = new Point(flAMPMSizeS.X, flAMPMSizeS.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     ampmcutSa,
                     _font,
-                    new Rectangle(flClockSizeS.X, 0, flClockSizeS.X + flAMPMSizeS.X, flClockSizePlaceholder.Y),
+                    new Rectangle(flClockSizeS.X, 0, flAMPMSizeS.X, flClockSizePlaceholder.Y),
                     Color.White,
                     false,
                     true,
@@ -390,33 +391,37 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Left,
                     VerticalAlignment.Bottom
                     );
+                this.Size = new Point(flFixSizeS.X, flFixSizeS.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     flTimeFixS,
                     _fontSmall,
-                    new Rectangle(flClockSizeS.X + flAMPMSizeS.X, 0, flClockSizeS.X + flAMPMSizeS.X + flFixSizeS.X, flClockSizePlaceholder.Y),
+                    new Rectangle(flClockSizeS.X + flAMPMSizeS.X, 0, flFixSizeS.X, flClockSizePlaceholder.Y),
                     Color.White,
                     false,
                     true,
                     1,
                     HorizontalAlignment.Left,
-                    VerticalAlignment.Middle
+                    VerticalAlignment.Bottom
                     );
+
+                this.Size = new Point(flClockSizeL.X, flClockSizeL.Y);
 
                 spriteBatch.DrawStringOnCtrl(this,
                     flClockL,
                     _font,
-                    new Rectangle(firstDistance, 0, firstDistance + flClockSizeL.X, flClockSizePlaceholder.Y),
+                    new Rectangle(firstDistance, 0, flClockSizeL.X, flClockSizePlaceholder.Y),
                     Color.White,
                     false,
                     true,
                     1,
-                    HorizontalAlignment.Left,
+                    HorizontalAlignment.Right,
                     VerticalAlignment.Bottom
                     );
+                this.Size = new Point(flAMPMSizeL.X, flAMPMSizeL.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     ampmcutLa,
                     _font,
-                    new Rectangle(firstDistance + flClockSizeL.X, 0, firstDistance + flClockSizeL.X + flAMPMSizeL.X, flClockSizePlaceholder.Y),
+                    new Rectangle(firstDistance + flClockSizeL.X, 0, flAMPMSizeL.X, flClockSizePlaceholder.Y),
                     Color.White,
                     false,
                     true,
@@ -424,33 +429,37 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Left,
                     VerticalAlignment.Bottom
                     );
+                this.Size = new Point(flFixSizeL.X, flFixSizeL.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     flTimeFixL,
                     _fontSmall,
-                    new Rectangle(firstDistance + flClockSizeL.X + flAMPMSizeL.X, 0, firstDistance + flClockSizeL.X + flAMPMSizeL.X + flFixSizeL.X, flClockSizePlaceholder.Y),
+                    new Rectangle(firstDistance + flClockSizeL.X + flAMPMSizeL.X, 0, flFixSizeL.X, flClockSizePlaceholder.Y),
                     Color.White,
                     false,
                     true,
                     1,
                     HorizontalAlignment.Left,
-                    VerticalAlignment.Middle
+                    VerticalAlignment.Bottom
                     );
+
+                this.Size = new Point(flClockSizeT.X, flClockSizeT.Y);
 
                 spriteBatch.DrawStringOnCtrl(this,
                     flClockT,
                     _font,
-                    new Rectangle(secondDistance, 0, secondDistance + flClockSizeT.X, flClockSizePlaceholder.Y),
+                    new Rectangle(secondDistance, 0, flClockSizeT.X, flClockSizePlaceholder.Y),
                     Color.White,
                     false,
                     true,
                     1,
-                    HorizontalAlignment.Left,
+                    HorizontalAlignment.Right,
                     VerticalAlignment.Bottom
                     );
+                this.Size = new Point(flAMPMSizeT.X, flAMPMSizeT.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     ampmcutTa,
                     _font,
-                    new Rectangle(secondDistance + flClockSizeT.X, 0, secondDistance + flClockSizeT.X + flAMPMSizeT.X, flClockSizePlaceholder.Y),
+                    new Rectangle(secondDistance + flClockSizeT.X, 0, flAMPMSizeT.X, flClockSizePlaceholder.Y),
                     Color.White,
                     false,
                     true,
@@ -458,21 +467,11 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Left,
                     VerticalAlignment.Bottom
                     );
+                this.Size = new Point(flFixSizeT.X, flFixSizeT.Y);
                 spriteBatch.DrawStringOnCtrl(this,
                     flTimeFixT,
                     _fontSmall,
-                    new Rectangle(secondDistance + flClockSizeT.X + flAMPMSizeT.X, 0, secondDistance + flClockSizeT.X + flAMPMSizeT.X + flFixSizeT.X, flClockSizePlaceholder.Y),
-                    Color.White,
-                    false,
-                    true,
-                    1,
-                    HorizontalAlignment.Left,
-                    VerticalAlignment.Middle
-                    );
-                spriteBatch.DrawStringOnCtrl(this,
-                    flClockDN,
-                    _font,
-                    new Rectangle(secondDistance + flClockSizeT.X + flAMPMSizeT.X + flFixSizeT.X, 0, secondDistance + flClockSizeT.X + flAMPMSizeT.X + flFixSizeT.X + flDNSize.X, flClockSizePlaceholder.Y),
+                    new Rectangle(secondDistance + flClockSizeT.X + flAMPMSizeT.X, 0, flFixSizeT.X, flClockSizePlaceholder.Y),
                     Color.White,
                     false,
                     true,
@@ -480,6 +479,19 @@ namespace Manlaan.Clock.Control
                     HorizontalAlignment.Left,
                     VerticalAlignment.Bottom
                     );
+                this.Size = new Point(flDNSize.X, flDNSize.Y);
+                spriteBatch.DrawStringOnCtrl(this,
+                    flClockDN,
+                    _font,
+                    new Rectangle(secondDistance + flClockSizeT.X + flAMPMSizeT.X + flFixSizeT.X, 0, flDNSize.X, flClockSizePlaceholder.Y),
+                    Color.White,
+                    false,
+                    true,
+                    1,
+                    HorizontalAlignment.Left,
+                    VerticalAlignment.Bottom
+                    );
+                this.Size = new Point(flClockSizePlaceholder.X, flClockSizePlaceholder.Y);
             }
         }
 
