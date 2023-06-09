@@ -1,6 +1,6 @@
 {
   "name": "Clock",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "namespace": "Manlaan.Clock",
   "package": "Clock.dll",
   "manifest_version": 1,
@@ -26,6 +26,7 @@
 }
 /*
     "changelog": {
+        "1.2.3": "2023-06-09: Fixed font sizes below 14 crashing BlishHUD. Happy pride month.
         "1.2.2": "2023-04-22: Added flat clock, fixed some font alignment",
         "1.2.1": "2022-03-14: Undo PR changes, add check for location, fix day/night to show if no times selected",
         "1.2.0": "2022-03-14: Day/Night Display",

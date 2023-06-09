@@ -144,7 +144,14 @@ namespace Manlaan.Clock
         
         private void UpdateClockSettings_Font(object sender = null, ValueChangedEventArgs<string> e = null)
         {
-            settingFontSizeSmall = Int32.Parse(_settingClockFontSize.Value) - 2;
+
+            if (Int32.Parse(_settingClockFontSize.Value) >= 14)
+            {
+                settingFontSizeSmall = Int32.Parse(_settingClockFontSize.Value) - 2;
+            }
+            else {
+                settingFontSizeSmall = Int32.Parse(_settingClockFontSize.Value);
+            }
             _clockImg.Font_Size = (ContentService.FontSize) Enum.Parse(typeof(ContentService.FontSize), "Size" + _settingClockFontSize.Value);
             _clockImg.Font_Size_Small = (ContentService.FontSize)Enum.Parse(typeof(ContentService.FontSize), "Size" + settingFontSizeSmall.ToString());
             _clockImg.LabelAlign = (HorizontalAlignment) Enum.Parse(typeof(HorizontalAlignment), _settingClockLabelAlign.Value);
